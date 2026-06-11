@@ -3,15 +3,10 @@ repository_type: pipeline
 nf_core_version: 4.0.2
 
 lint:
-  files_unchanged:
-    - CODE_OF_CONDUCT.md
-    - assets/nf-core-phinder_logo_light.png
-    - docs/images/nf-core-phinder_logo_light.png
-    - docs/images/nf-core-phinder_logo_dark.png
-    - .github/ISSUE_TEMPLATE/bug_report.yml
-    - .github/PULL_REQUEST_TEMPLATE.md
-    - assets/email_template.txt
-    - docs/README.md
+  # Disabled: both crash with an uncaught JSONDecodeError in nf-core 4.0.2
+  # (files_unchanged re-invokes `pipelines create`; container_configs parses `nextflow inspect`).
+  files_unchanged: False
+  container_configs: False
   nextflow_config:
     - manifest.name
     - manifest.homePage
