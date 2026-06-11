@@ -297,7 +297,7 @@
             "default": 20
         },
         "diamond_evalue": {
-            "type": "number",
+            "type": "string",
             "default": 1e-05
         },
         "skip_checkv": {
