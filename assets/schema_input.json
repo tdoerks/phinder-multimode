@@ -1,0 +1,53 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://raw.githubusercontent.com/tdoerks/phinder/master/assets/schema_input.json",
+    "title": "tdoerks/phinder pipeline - params.input schema",
+    "description": "Schema for the file provided with params.input",
+    "type": "array",
+    "items": {
+        "type": "object",
+        "properties": {
+            "sample": {
+                "type": "string",
+                "pattern": "^\\S+$",
+                "errorMessage": "Sample name must be provided and cannot contain spaces",
+                "meta": ["id"]
+            },
+            "fastq_1": {
+                "type": "string",
+                "format": "file-path",
+                "exists": true,
+                "pattern": "^([\\S\\s]*\\/)?[^\\s\\/]+\\.f(ast)?q\\.gz$",
+                "errorMessage": "Short-read FASTQ R1 must have extension '.fq.gz' or '.fastq.gz' and cannot contain spaces"
+            },
+            "fastq_2": {
+                "type": "string",
+                "format": "file-path",
+                "exists": true,
+                "pattern": "^([\\S\\s]*\\/)?[^\\s\\/]+\\.f(ast)?q\\.gz$",
+                "errorMessage": "Short-read FASTQ R2 must have extension '.fq.gz' or '.fastq.gz' and cannot contain spaces"
+            },
+            "long_fastq": {
+                "type": "string",
+                "format": "file-path",
+                "exists": true,
+                "pattern": "^([\\S\\s]*\\/)?[^\\s\\/]+\\.f(ast)?q\\.gz$",
+                "errorMessage": "Long-read (ONT) FASTQ must have extension '.fq.gz' or '.fastq.gz' and cannot contain spaces"
+            },
+            "fasta": {
+                "type": "string",
+                "format": "file-path",
+                "exists": true,
+                "pattern": "^([\\S\\s]*\\/)?[^\\s\\/]+\\.f(n)?a(sta)?(\\.gz)?$",
+                "errorMessage": "Pre-assembled FASTA (assembly mode) must have extension '.fa', '.fna', '.fasta' (optionally .gz)"
+            },
+            "platform": {
+                "type": "string",
+                "enum": ["illumina", "ont", "hybrid"],
+                "errorMessage": "platform, if set, must be one of: illumina, ont, hybrid",
+                "meta": ["platform"]
+            }
+        },
+        "required": ["sample"]
+    }
+}
