@@ -23,10 +23,12 @@ DATA_DIR="${DATA_DIR:-$PWD/test_hybrid_data}"               # output of fetch_te
 export NXF_SINGULARITY_CACHEDIR="${NXF_SINGULARITY_CACHEDIR:-$PWD/singularity_cache}"
 mkdir -p "$NXF_SINGULARITY_CACHEDIR"
 
-# Beocat modules — VERIFY exact names with: module spider nextflow / module spider singularity
+# Beocat modules — VERIFY exact names with: module spider nextflow
 module purge
 module load Nextflow
-module load SingularityCE 2>/dev/null || module load Singularity
+# Apptainer/Singularity are system binaries on Beocat (/usr/bin/apptainer, /usr/bin/singularity)
+# — no module to load. The pipeline's `beocat` profile uses singularity.enabled=true, which
+# drives /usr/bin/singularity (Apptainer's compat shim).
 
 nextflow run "$PIPELINE_DIR" \
     -profile beocat \
