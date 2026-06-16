@@ -12,9 +12,9 @@ process VIBRANT {
     path db
 
     output:
-    tuple val(meta), path("VIBRANT_${prefix}/**")                                                    , emit: results
-    tuple val(meta), path("VIBRANT_${prefix}/VIBRANT_results_*/VIBRANT_genome_quality_*.tsv")        , emit: quality, optional: true
-    tuple val(meta), path("VIBRANT_${prefix}/VIBRANT_phages_*/*.phages_combined.fna")                , emit: phages , optional: true
+    tuple val(meta), path("VIBRANT_*/**")                                                    , emit: results
+    tuple val(meta), path("VIBRANT_*/VIBRANT_results_*/VIBRANT_genome_quality_*.tsv")        , emit: quality, optional: true
+    tuple val(meta), path("VIBRANT_*/VIBRANT_phages_*/*.phages_combined.fna")                , emit: phages , optional: true
     // VIBRANT has no reliable CLI version flag → pin to the container tag (mirrors bacphlip's approach).
     tuple val("${task.process}"), val('vibrant'), val('1.2.1'), topic: versions, emit: versions_vibrant
 
@@ -23,7 +23,7 @@ process VIBRANT {
 
     script:
     def args = task.ext.args ?: ''
-    prefix = task.ext.prefix ?: "${meta.id}"
+    def prefix = task.ext.prefix ?: "${meta.id}"
     // VIBRANT needs an uncompressed nucleotide FASTA; -d points at the downloaded DB dir (databases/).
     def decompress = fasta.name.endsWith('.gz') ? "gunzip -c ${fasta} > ${prefix}.fna" : "cp ${fasta} ${prefix}.fna"
     def db_arg = db ? "-d ${db}" : ''
@@ -39,7 +39,7 @@ process VIBRANT {
     """
 
     stub:
-    prefix = task.ext.prefix ?: "${meta.id}"
+    def prefix = task.ext.prefix ?: "${meta.id}"
     """
     mkdir -p VIBRANT_${prefix}/VIBRANT_results_${prefix}
     touch VIBRANT_${prefix}/VIBRANT_results_${prefix}/VIBRANT_genome_quality_${prefix}.tsv
